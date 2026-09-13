@@ -182,13 +182,13 @@ class VoiceRecorderCard extends HTMLElement {
 
         return new Promise((resolve, reject) => {
             const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/gh/kukuxx/Recorder@master/recorder.mp3.min.js';
+            script.src = '/voice-recorder/recorder.mp3.min.js';
 
             script.onload = () => {
                 // 載入英文語言包並設置語言為英文（避免簡體中文輸出）
                 if (window.Recorder && window.Recorder.i18n) {
                     const i18nScript = document.createElement('script');
-                    i18nScript.src = 'https://cdn.jsdelivr.net/gh/kukuxx/Recorder@master/src/i18n/en-US.js';
+                    i18nScript.src = '/voice-recorder/en-US.js';
                     i18nScript.onload = () => {
                         window.Recorder.i18n.lang = "en-US";
                         console.log('Recorder language set to English');
@@ -212,7 +212,7 @@ class VoiceRecorderCard extends HTMLElement {
             };
 
             // 避免重複添加script標籤
-            if (!document.querySelector('script[src="https://cdn.jsdelivr.net/gh/kukuxx/Recorder@master/recorder.mp3.min.js"]')) {
+            if (!document.querySelector('script[src="/voice-recorder/recorder.mp3.min.js"]')) {
                 document.body.appendChild(script);
             } else {
                 // 如果script已存在，直接初始化
@@ -389,6 +389,10 @@ class VoiceRecorderCard extends HTMLElement {
 
                 } catch (error) {
                     this._showError('Failed to save recording: ' + error.message);
+                } finally {
+                    // Mikrofon freigeben, sonst bleibt es auf iOS bis zum App-Neustart belegt
+                    try { this.recorder.close(); } catch (e) { void e; }
+                    this.recorderInitialized = false;
                 }
             });
         } catch (error) {

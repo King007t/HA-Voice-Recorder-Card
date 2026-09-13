@@ -5,6 +5,7 @@ from homeassistant.components.frontend import add_extra_js_url
 from homeassistant.components.http import StaticPathConfig
 
 from .const import (
+    BASE_URL,
     DOMAIN, 
     FRONTEND_URL,
     RECORDER_VER,
@@ -26,6 +27,20 @@ async def async_setup_frontend(hass, entity_id):
                     FRONTEND_URL,
                     hass.config.path(
                         f"custom_components/{DOMAIN}{SCRIPT_URL}"
+                    ),
+                    False,
+                ),
+                StaticPathConfig(
+                    BASE_URL + "/recorder.mp3.min.js",
+                    hass.config.path(
+                        f"custom_components/{DOMAIN}/recorder.mp3.min.js"
+                    ),
+                    False,
+                ),
+                StaticPathConfig(
+                    BASE_URL + "/en-US.js",
+                    hass.config.path(
+                        f"custom_components/{DOMAIN}/en-US.js"
                     ),
                     False,
                 )
